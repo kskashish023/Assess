@@ -13,6 +13,19 @@ automations:
           label: "{{ calc.etr }} min review"
           color: {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
 
+  label_deleted_files:
+    if:
+      - {{ has.deleted_files }}
+    run: 
+      - action: add-label@v1
+        args:
+          label: 'deleted-files'
+          color: '#DF9C04'
+
+# This is used in the `label_deleted_files` automation
+has:
+  deleted_files: {{ source.diff.files | map(attr='new_file') | match(term='/dev/null') | some }}
+
 calc:
   etr: {{ branch | estimatedReviewTime }}
 
@@ -21,4 +34,9 @@ colors:
   red: 'b60205'
   yellow: 'fbca04'
   green: '0e8a16'
+
+
+
+
+
 
