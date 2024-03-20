@@ -1,10 +1,9 @@
-# -*- mode: yaml -*-
 manifest:
   version: 1.0
   automations:
     approve_tiny_change:
       if:
-        - {{ is.one_file and is.one_line }}
+        - {{ files | length == 1 and changes.additions - changes.deletions <= 1 }}
       run:
         - action: add-label@v1
           args:
@@ -16,11 +15,11 @@ manifest:
               This PR has been approved because it is only a single line
     auto_merge:
       if:
-        - {{ contains.labels 'single-line' }}
+        - contains.labels 'single-line'
       run:
         - action: merge@v1
           args:
-            method: "squash"
+            method: squash
         - action: add-comment@v1
           args:
             comment: |
