@@ -4,24 +4,26 @@ manifest:
   version: 1.0
 
 automations:
-  safe_changes:
-    # Triggered for any changes that only affect formatting, documentation, tests, or images
+  approve_tiny_change:
+    # Triggered for PRs that contain one file and one line.
     if:
-      - {{ is.formatting or is.docs or is.tests or is.image }}
-    # Apply a safe change label, approve the PR and explain why in a comment.
-    run: 
+      - {{ is.one_file and is.one_line }}
+    run:
       - action: add-label@v1
         args:
-          label: 'safe-change'
+          label: 'single-line'
       - action: approve@v1
       - action: add-comment@v1
         args:
           comment: |
-            This PR is considered a safe change and has been automatically approved.
+            This PR has been approved because it is only a single line
 
-# These custom expressions are used in the safe_changes automation
+changes:
+  # Sum all the lines added in the PR
+  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
+  # Sum all the line removed in the PR
+  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
+
 is:
-  formatting: {{ source.diff.files | isFormattingChange }}
-  docs: {{ files | allDocs }}
-  tests: {{ files | allTests }}
-  image: {{ files | allImages }}
+  one_file: {{ files | length == 1 }}
+  one_line: {{ changes.additions - changes.deletions <= 1 }}
