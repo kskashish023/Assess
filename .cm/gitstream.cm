@@ -18,6 +18,13 @@ automations:
           comment: |
             This PR has been approved because it is only a single line
 
+  auto_merge:
+    conditions:
+      - label: 'single-line'
+    actions:
+      - merge: true
+      - comment: 'This PR has been automatically merged'
+
 changes:
   # Sum all the lines added in the PR
   additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
