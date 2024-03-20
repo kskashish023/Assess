@@ -47,6 +47,8 @@ is:
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
   image: {{ files | allImages }}
+  one_file: {{ files | length == 1 }}
+  one_line: {{ changes.additions - changes.deletions <= 1 }}
 
 approve_tiny_change:
     # Triggered for PRs that contain one file and one line.
@@ -67,10 +69,6 @@ changes:
   additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
   # Sum all the line removed in the PR
   deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
-
-is:
-  one_file: {{ files | length == 1 }}
-  one_line: {{ changes.additions - changes.deletions <= 1 }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
