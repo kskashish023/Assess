@@ -23,7 +23,7 @@ automations:
       - label: 'single-line'
     actions:
       - merge: true
-      - comment: 'This PR has been automatically merged'
+      - comment: "This PR has been automatically merged"
 
 changes:
   # Sum all the lines added in the PR
