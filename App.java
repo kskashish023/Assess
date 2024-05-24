@@ -1,5 +1,6 @@
 /*
  * FanOut/FanIn pattern is a concurrency pattern that refers to executing multiple instances of the
+  * Permission is hereby granted, free of charge, to any person obtaining a copy
  */
 package com.iluwatar.fanout.fanin;
 
